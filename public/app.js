@@ -40,7 +40,7 @@ function showLogin(msg) {
 <button class="p" id="li">Sign in</button><div class="err" id="lerr">${esc(msg || '')}</div></section>
 <section class="card"><h2>Patient or paramedic intake</h2><p class="sub">No account needed. In a real emergency call your local emergency number.</p>${fields('pub', ['Self-portal', 'Paramedic'])}
 <button class="p" id="pi">Send to triage</button><div class="err" id="pr" style="color:inherit"></div></section></div>`;
-  const go = async () => { try { const j = await api('/login', 'POST', { username: $('#u').value, password: $('#p').value }); tok = j.token; sessionStorage.setItem('tok', tok); me = j.user; showApp(); } catch (e) { $('#lerr').textContent = e.message; } };
+ const go = async () => { try { const j = await api('/login', 'POST', { username: $('#u').value, password: $('#p').value }); tok = j.token; sessionSave(); showApp(); } catch (e) { showLogin(e.message); } };
   $('#li').onclick = go; $('#p').addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
   $('#pi').onclick = async () => { try { const j = await api('/intake', 'POST', readF('pub')); $('#pr').innerHTML = `Received. Your ticket number is <b>#${j.ticket}</b>. Tell a staff member if your condition gets worse.`; clearF('pub'); } catch (e) { $('#pr').textContent = e.message; $('#pr').style.color = '#d92d3a'; } };
 }
